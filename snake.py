@@ -25,13 +25,26 @@ def makeMove(move, snake, food):
         head[1] +=1
     elif move == LEFT:
         head[1] -=1
+
+    #case where it ran out of ground
+    for i,item in enumerate(head):
+        if item == WIDTH and i == 0 :
+            head[i] = 0
+        if item == -1 and i == 0:
+            head[i] = WIDTH
+        if item == HEIGHT and i == 1:
+            head[i] = 0
+        if item == -1 and i == 1:
+            head[i] = HEIGHT
+
+    lost = True if head in snake else False
     snake.insert(0,head)
     if food == head :
         food = getFood(snake)
     else:
         snake.pop()
 
-    return snake,food
+    return snake, food, lost
 
 def getFood(snake):
     food = None

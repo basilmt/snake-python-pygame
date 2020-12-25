@@ -63,6 +63,8 @@ while True:
 
             elif event.key == pygame.K_DOWN and move != sn.UP:
                 move = sn.DOWN
+            
+            continue
 
 
     screen.fill(BLACK)
@@ -107,7 +109,7 @@ while True:
         pygame.display.flip()
         continue
         
-    snake,food = sn.makeMove(move,snake,food)
+    snake, food, lost = sn.makeMove(move,snake,food)
 
     # Draw board
     cells = []
@@ -155,6 +157,12 @@ while True:
 
 
     # Display Score
+    text = "dead" if lost else "live"
+    text = mediumFont.render(text, True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = ((5 / 6) * width, (2 / 3) * height *1.3)
+    screen.blit(text, textRect)
+
     text = "SCORE"
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
@@ -167,5 +175,5 @@ while True:
     textRect.center = ((5 / 6) * width, (2 / 3) * height *1.1)
     screen.blit(text, textRect)
 
-    time.sleep(1)
+    time.sleep(0.05)
     pygame.display.flip()
