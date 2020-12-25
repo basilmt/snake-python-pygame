@@ -157,11 +157,6 @@ while True:
 
 
     # Display Score
-    text = "dead" if lost else "live"
-    text = mediumFont.render(text, True, WHITE)
-    textRect = text.get_rect()
-    textRect.center = ((5 / 6) * width, (2 / 3) * height *1.3)
-    screen.blit(text, textRect)
 
     text = "SCORE"
     text = mediumFont.render(text, True, WHITE)
@@ -169,7 +164,7 @@ while True:
     textRect.center = ((5 / 6) * width, (2 / 3) * height)
     screen.blit(text, textRect)
 
-    text = str(score)
+    text = str(len(snake)*5)
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height *1.1)
