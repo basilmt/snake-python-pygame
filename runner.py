@@ -35,7 +35,6 @@ board_origin = (BOARD_PADDING, BOARD_PADDING)
 
 
 lost = False
-score = int(0)
 move = sn.RIGHT
 snake = sn.initialState()
 food = sn.getFood(snake)
@@ -45,8 +44,7 @@ instructions = True
 
 while True:
 
-    print(snake)
-    # Check if game quit
+    # Check if game quit and keystrokes
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -64,7 +62,7 @@ while True:
             elif event.key == pygame.K_DOWN and move != sn.UP:
                 move = sn.DOWN
             
-            continue
+            break
 
 
     screen.fill(BLACK)
@@ -108,8 +106,33 @@ while True:
         time.sleep(0.3)
         pygame.display.flip()
         continue
-        
-    snake, food, lost = sn.makeMove(move,snake,food)
+
+    
+        # Reset button
+    
+    resetButton = pygame.Rect(
+        (2 / 3) * width + BOARD_PADDING, (1 / 3) * height + 20,
+        (width / 3) - BOARD_PADDING * 2, 50
+    )
+    buttonText = mediumFont.render("Reset", True, BLACK)
+    buttonRect = buttonText.get_rect()
+    buttonRect.center = resetButton.center
+    pygame.draw.rect(screen, WHITE, resetButton)
+    screen.blit(buttonText, buttonRect)
+
+    left, _, _ = pygame.mouse.get_pressed()
+    if left == 1:
+        mouse = pygame.mouse.get_pos()
+        # Reset game state
+        if resetButton.collidepoint(mouse):
+            time.sleep(0.3)
+            lost = False
+            move = sn.RIGHT
+            snake = sn.initialState()
+            food = sn.getFood(snake)
+
+    if not lost:
+        snake, food, lost = sn.makeMove(move,snake,food)
 
     # Draw board
     cells = []
@@ -136,35 +159,14 @@ while True:
             row.append(rect)
         cells.append(row)
 
-    # Reset button
-    resetButton = pygame.Rect(
-        (2 / 3) * width + BOARD_PADDING, (1 / 3) * height + 20,
-        (width / 3) - BOARD_PADDING * 2, 50
-    )
-    buttonText = mediumFont.render("Reset", True, BLACK)
-    buttonRect = buttonText.get_rect()
-    buttonRect.center = resetButton.center
-    pygame.draw.rect(screen, WHITE, resetButton)
-    screen.blit(buttonText, buttonRect)
-
-    left, _, _ = pygame.mouse.get_pressed()
-    if left == 1:
-        mouse = pygame.mouse.get_pos()
-        # Reset game state
-        if resetButton.collidepoint(mouse):
-            time.sleep(0.3)
-            lost = False
-
-
     # Display Score
-
     text = "SCORE"
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height)
     screen.blit(text, textRect)
 
-    text = str(len(snake)*5)
+    text = sn.getScore(snake)
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height *1.1)

@@ -38,10 +38,11 @@ def makeMove(move, snake, food):
             head[i] = HEIGHT
 
     lost = True if head in snake else False
-    snake.insert(0,head)
+    if not lost:
+        snake.insert(0,head)
     if food == head :
         food = getFood(snake)
-    else:
+    elif not lost:
         snake.pop()
 
     return snake, food, lost
@@ -56,3 +57,7 @@ def getFood(snake):
         food = nf if nf not in snake else None
 
     return food
+
+def getScore(snake):
+    score = (len(snake) - len(initialState()))*5
+    return str(score)
