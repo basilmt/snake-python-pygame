@@ -2,9 +2,9 @@ import pygame
 import sys
 import time
 
-import snake as sn
+import snake as sna
 
-
+sn = sna.snake()
 HEIGHT = sn.HEIGHT
 WIDTH = sn.WIDTH
 
