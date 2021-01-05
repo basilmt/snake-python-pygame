@@ -10,6 +10,8 @@ class snake:
         self.LEFT = "LEFT"
         self.RIGHT = "RIGHT"
 
+        self.move = self.RIGHT
+
         self.score = 0
         self.snake = self.initialState()
         self.food = self.setFood()
@@ -25,9 +27,10 @@ class snake:
         ]
         return snake
 
-    def makeMove(self, move):
+    def makeMove(self):
         snake = self.getSnake()
         food = self.getFood()
+        move = self.getMove()
         # Switch cases to find where to
         head = snake[0].copy()
         if move == self.UP:
@@ -40,7 +43,7 @@ class snake:
             head[1] -=1
 
         #case where it ran out of ground
-        # this case come through the other way - classic i think
+        # in this case come through the other way - classic i think
         for i,item in enumerate(head):
             if item == self.FRAME_WIDTH and i == 0 :
                 head[i] = 0
@@ -64,7 +67,6 @@ class snake:
         self.food = food
         self.gameOver = lost
 
-        return snake, food, lost
 
     def setFood(self):
         snake = self.getSnake()
@@ -84,6 +86,7 @@ class snake:
     def reset(self):
         self.score = 0
         self.gameOver = False
+        self.setMove(self.RIGHT)
         self.snake = self.initialState()
         self.food = self.setFood()
 
@@ -99,3 +102,19 @@ class snake:
 
     def setScore(self):
         self.score += self.scoreIncrement
+
+    def setMove(self,move):
+        if move == self.RIGHT and self.move != self.LEFT:
+            self.move = self.RIGHT
+
+        elif move == self.LEFT and self.move != self.RIGHT:
+            self.move = self.LEFT
+
+        elif move == self.UP and self.move != self.DOWN:
+            self.move = self.UP
+
+        elif move == self.DOWN and self.move != self.UP:
+            self.move = self.DOWN
+
+    def getMove(self):
+        return self.move

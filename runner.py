@@ -32,8 +32,6 @@ board_height = height - (BOARD_PADDING * 2)
 cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
 
-#move the snake to right initially
-move = snake.RIGHT
 # Show instructions initially
 instructions = True
 
@@ -45,17 +43,17 @@ while True:
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT and move != snake.LEFT:
-                move = snake.RIGHT
+            if event.key == pygame.K_RIGHT :
+                snake.setMove(snake.RIGHT)
 
-            elif event.key == pygame.K_LEFT and move != snake.RIGHT:
-                move = snake.LEFT
+            elif event.key == pygame.K_LEFT :
+                snake.setMove(snake.LEFT)
 
-            elif event.key == pygame.K_UP and move != snake.DOWN:
-                move = snake.UP
+            elif event.key == pygame.K_UP :
+                snake.setMove(snake.UP)
 
-            elif event.key == pygame.K_DOWN and move != snake.UP:
-                move = snake.DOWN
+            elif event.key == pygame.K_DOWN :
+                snake.setMove(snake.DOWN)
             
             break
 
@@ -120,11 +118,10 @@ while True:
         # Reset game state
         if resetButton.collidepoint(mouse):
             time.sleep(0.3)
-            move = snake.RIGHT
             snake.reset()
 
     if not snake.isGameOver():
-        snake.makeMove(move)
+        snake.makeMove()
 
     snakeList = snake.getSnake()
     snakeFood = snake.getFood()
