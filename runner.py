@@ -2,12 +2,11 @@ import pygame
 import sys
 import time
 
-import snake as sna
+import snake
 
-sn = sna.snake()
-HEIGHT = sn.HEIGHT
-WIDTH = sn.WIDTH
-
+snake = snake.snake()
+HEIGHT = snake.FRAME_HEIGHT
+WIDTH = snake.FRAME_WIDTH
 
 # Colors
 BLACK = (0, 0, 0)
@@ -33,12 +32,8 @@ board_height = height - (BOARD_PADDING * 2)
 cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
 
-
-lost = False
-move = sn.RIGHT
-snake = sn.initialState()
-food = sn.getFood(snake)
-
+#move the snake to right initially
+move = snake.RIGHT
 # Show instructions initially
 instructions = True
 
@@ -50,17 +45,17 @@ while True:
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT and move != sn.LEFT:
-                move = sn.RIGHT
+            if event.key == pygame.K_RIGHT and move != snake.LEFT:
+                move = snake.RIGHT
 
-            elif event.key == pygame.K_LEFT and move != sn.RIGHT:
-                move = sn.LEFT
+            elif event.key == pygame.K_LEFT and move != snake.RIGHT:
+                move = snake.LEFT
 
-            elif event.key == pygame.K_UP and move != sn.DOWN:
-                move = sn.UP
+            elif event.key == pygame.K_UP and move != snake.DOWN:
+                move = snake.UP
 
-            elif event.key == pygame.K_DOWN and move != sn.UP:
-                move = sn.DOWN
+            elif event.key == pygame.K_DOWN and move != snake.UP:
+                move = snake.DOWN
             
             break
 
@@ -69,7 +64,6 @@ while True:
 
     # Show game instructions
     if instructions:
-
         # Title
         title = largeFont.render("Play Snake Game", True, WHITE)
         titleRect = title.get_rect()
@@ -126,13 +120,14 @@ while True:
         # Reset game state
         if resetButton.collidepoint(mouse):
             time.sleep(0.3)
-            lost = False
-            move = sn.RIGHT
-            snake = sn.initialState()
-            food = sn.getFood(snake)
+            move = snake.RIGHT
+            snake.reset()
 
-    if not lost:
-        snake, food, lost = sn.makeMove(move,snake,food)
+    if not snake.isGameOver():
+        snake.makeMove(move)
+
+    snakeList = snake.getSnake()
+    snakeFood = snake.getFood()
 
     # Draw board
     cells = []
@@ -151,10 +146,10 @@ while True:
 
             # Add snake
 
-            if [i, j] in snake:
+            if [i, j] in snakeList:
                 pygame.draw.rect(screen, BLACK, rect)
                 # screen.blit(mine, rect)
-            elif [i,j] == food:
+            elif [i,j] == snakeFood:
                 pygame.draw.rect(screen, RED, rect)
             row.append(rect)
         cells.append(row)
@@ -166,7 +161,7 @@ while True:
     textRect.center = ((5 / 6) * width, (2 / 3) * height)
     screen.blit(text, textRect)
 
-    text = sn.getScore(snake)
+    text = snake.getScore()
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height *1.1)
